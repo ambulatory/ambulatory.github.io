@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+h1 {
+	text-align:center;
+}
+form {
+	font:20px sans-serif;
+	background-color:rgba(0, 0, 0, 0.15);
+	border:1px solid black;
+	border-radius:5px;
+	width:40em;
+	padding:1em;
+	margin:auto;
+}
+input {
+	font:inherit;
+	margin:0.5em 0;
+}
+div.output {
+	font:40px sans-serif;
+	text-align:center;
+	margin-top:0.5em;
+}
+div.output span {
+	color:red;
+}
+a.backA {
+	position:absolute;
+	left:5px;
+	top:0;
+	text-decoration:none;
+}
+a.backA:visited {
+	color:blue;
+}
+a.backA:hover {
+	color:black;
+}
+div.footer {
+	position:fixed;
+	width:100%;
+	bottom:0;
+	right:0;
+	text-align:right;
+	opacity:.5;
+}
+</style>
+</head>
+<body>
+<a class="backA" href="index.html">Back</a>
+<h1>Solomon Max Reward</h1>
+
+<form action="javascript:calc()">
+Ponyboy Level: <input type="number" id="ponyboy" name="ponyboy"><br>
+Max Reward: <input type="number" id="max" name="max"><br>
+Transcendent Power: <input type="number" step="0.001" id="tp" placeholder="x.xxx"><br>
+I want to reach my max transcendent primal reward by zone <input type="number" id="zone" step="5"><br>
+<input type="submit" value="Calculate">
+</form>
+
+<div id="output" class="output"></div>
+
+<div class="footer">12:19 PM 7/12/2016</div>
+
+<script>
+function calc()
+{
+	var ponyboy = document.getElementById("ponyboy").value;
+	var max = document.getElementById("max").value;
+	var tp = document.getElementById("tp").value;
+	var zone = document.getElementById("zone").value;
+	var bossNum = (zone - 100) / 5;
+	var multiplier = max / (20 * Math.pow(1 + (tp / 100), bossNum));
+	
+	var solomon = solomonToLevel(multiplier, ponyboy);
+	if(solomon > 1000000)
+		document.getElementById("output").innerHTML = "Solomon Level: " + solomon + "<br><span>(Approximate)</span> Cumulative Cost: " + experimentalCost(solomon).toPrecision(4) + " Hero Souls";
+	else
+		document.getElementById("output").innerHTML = "Solomon Level: " + solomon + "<br>Cumulative Cost: " + experimentalCost(solomon).toPrecision(4) + " Hero Souls";
+}
+function solomonToLevel(multiplier, ponyboy)
+{
+	ponyboy++;
+	if(multiplier >= 1 + ponyboy * 2.81)
+		return Math.ceil(((multiplier - 1) - 2 * ponyboy) / (ponyboy * 0.01));
+	if(multiplier >= 1 + ponyboy * 2.42)
+		return Math.ceil(((multiplier - 1) - 1.2 * ponyboy) / (ponyboy * 0.02));
+	if(multiplier >= 1 + ponyboy * 1.83)
+		return Math.ceil(((multiplier - 1) - 0.6 * ponyboy) / (ponyboy * 0.03));
+	if(multiplier >= 1 + ponyboy * 1.04)
+		return Math.ceil(((multiplier - 1) - 0.2 * ponyboy) / (ponyboy * 0.04));
+	if(multiplier >= 0)
+		return Math.ceil((multiplier - 1) / (ponyboy * 0.05));
+	return 0;
+}
+function recursiveCost(solomon)
+{
+	if(solomon >= 2)
+		return Math.round(Math.pow(solomon, 1.5)) + recursiveCost(solomon - 1);
+	return 0;
+}
+function experimentalCost(solomon)
+{
+	if(solomon === 1)
+		return "*";
+	var cost = 0;
+	var cycles = 0
+	while(solomon >= 2 && cycles < 100)
+	{
+		cost += costNext(solomon, 0);
+		solomon -= 10000;
+		cycles++;
+	}
+	return cost;
+}
+function costNext(solomon, count)
+{
+	if(solomon >=2 && count < 10000)
+		return Math.round(Math.pow(solomon, 1.5)) + costNext(solomon - 1, count + 1);
+	return 0;
+}
+</script>
+</body>
+</html>

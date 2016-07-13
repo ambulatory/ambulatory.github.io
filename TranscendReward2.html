@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+	overflow-x:scroll;
+}
+h1 {
+	text-align:center;
+}
+form {
+	font:30px sans-serif;
+	width:35%;
+	float:left;
+	padding:0.5em 1em;
+	border:1px solid rgba(0, 0, 0, 0.5);
+	background-color:rgba(0, 0, 0, 0.15)
+}
+form input {
+	font:inherit;
+	margin:0.25em 0;
+	width:5em;
+}
+form input[type=submit] {
+	border:none;
+	font:inherit;
+	padding:0.3em;
+	background-color:blue;
+	color:white;
+	transition:background-color 0.2s;
+}
+form input[type=submit]:hover {
+	background-color:#3333ff;
+	cursor:pointer;
+}
+div.result-container {
+	display:inline-block;
+	width:55%;
+	float:left;
+	margin-left:1em;
+	
+}
+div.result-container table {
+	width:100%;
+	font:30px sans-serif;
+	text-align:center;
+	border:1px solid black;
+	border-collapse:collapse;
+}
+div.result-container table tr:nth-child(even) {
+	background-color:#e6e6e6;
+}
+div.result-container table:nth-child(even) {
+	background-color:#e6e6e6;
+}
+div.result-container table td, div.result-container table th {
+	padding:0.5em 0.8em;
+}
+a.backA {
+	position:absolute;
+	left:5px;
+	top:0;
+	text-decoration:none;
+}
+a.backA:visited {
+	color:blue;
+}
+a.backA:hover {
+	color:black;
+}
+</style>
+</head>
+<body>
+
+<div class="backDiv"><a class="backA" href="index.html">Back</a></div>
+
+<h1>Transcendent Reward Calculator 2</h1>
+
+<form action="javascript:calc()" class="input-container">
+Zone <input type="number" id="zone" step="5"><br>
+Transcendent Power <input type="number" id="tp" placeholder="x.xxx" step="0.001"><br>
+Solomon Level <input type="number" id="solomon"><br>
+Ponyboy Level <input type="number" id="ponyboy"><br>
+<input type="submit" value="Calculate"></form>
+
+<div class="result-container" id="output"></div>
+
+<script>
+function calc()
+{
+	var tableTp = [];
+	var tableOutput = [];
+	var tablePercent = [];
+	var tableRows = 5;
+	var tableHtml = "";
+	var zone = document.getElementById("zone").value;
+	var tp = document.getElementById("tp").value;
+	var solomon = solomonMult(document.getElementById("solomon").value, document.getElementById("ponyboy").value);
+	for(var i = 0; i < tableRows; i++)
+	{
+		tableTp[i] = i * 0.05 + Number(tp);
+		tableOutput[i] = Math.round((1 + solomon / 100) * 20 * Math.pow((1 + tableTp[i] / 100), ((zone - 100) / 5)));
+		if(i === 0)
+			tablePercent[i] = 0;
+		else
+			tablePercent[i] = Math.round(tableOutput[i] / tableOutput[0] * 1000) / 10 - 100;
+	}
+	var result = (1 + solomon / 100) * 20 * Math.pow((1 + tp / 100), ((zone - 100) / 5));
+	tableHtml = "<table><tr><th>TP</th><th>Hero Souls</th><th>% Inc</th></tr>"
+	for(var i = 0; i < tableRows; i++)
+	{
+		tableHtml += "<tr><td>" + tableTp[i].toFixed(3) + "%</td>";
+		tableHtml += "<td>" + tableOutput[i].toPrecision(4) + " Souls</td>";
+		tableHtml += "<td>" + tablePercent[i].toFixed(2) + "%</td></tr>";
+	}
+	tableHtml += "</table";
+	document.getElementById("output").innerHTML = tableHtml;
+}
+function solomonMult(level, pony)
+{
+	pony++;
+	if(level >= 1 && level <= 20)
+		return level * 5 * pony;
+	if(level >= 21 && level <= 40)
+		return (level * 4 + 20) * pony;
+	if(level >= 41 && level <= 60)
+		return (level * 3 + 60) * pony;
+	if(level >= 61 && level <= 80)
+		return (level * 2 + 120) * pony;
+	if(level > 80)
+		return (level * 1 + 200) * pony;
+	return 0;
+}
+</script>
+</body>
+</html>
