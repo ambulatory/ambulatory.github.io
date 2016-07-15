@@ -1,0 +1,109 @@
+body {
+	padding:0;
+	margin:0;
+	position:relative;
+	background-color:#e6e6e6;
+}
+.header-button {
+	border:3px solid #e6e6e6;
+	background-color:#333333;
+	color:#e6e6e6;
+	border-radius:0.5em;
+	padding:0.2em;
+	cursor:pointer;
+	transition:background-color 0.2s, color 0.2s;
+}
+.header-button:hover {
+	background-color:#e6e6e6;
+	color:#333333;
+}
+.content-button {
+	border:3px solid #333333;
+	background-color:#e6e6e6;
+	color:#333333;
+	border-radius:0.5em;
+	padding:0.2em;
+	cursor:pointer;
+	transition:background-color 0.2s, color 0.2s;
+}
+.content-button:hover {
+	background-color:#333333;
+	color:#e6e6e6;
+}
+.header {
+	display:inline-block;
+	width:84%;
+	background-color:#333333;
+	color:white;
+	font:50px sans-serif;
+	padding:0 8%;
+}
+.title {
+	display:block;
+	text-align:center;
+}
+.subtitle {
+	display:block;
+	text-align:center;
+	font-size:0.6em;
+}
+.content {
+	display:inline-block;
+	position:relative;
+	width:100%;
+	padding:0;
+	margin:0;
+	background-color:#e6e6e6;
+	font:25px sans-serif;
+	text-align:center;
+}
+.chapter {
+	display:block;
+	max-width:70%;
+	margin:auto;
+	margin-bottom:3em;
+	padding:0em 0;
+	line-height:1.5;
+	text-align:left;
+}
+.chapter > .name {
+	font-size:1.5em;
+	padding:0em;
+}
+.chapter > .paragraph {
+	font-size:1em;
+	position:relative;
+	left:2em;
+	text-indent:2em;
+}
+.user {
+	display:block;
+	max-width:70%;
+	margin:auto;
+	margin-bottom:3em;
+	border:2px solid rgba(0, 0, 0, 0.8);
+	border-radius:0.5em;
+	text-align:left;
+	padding:1em;
+	background-color:white;
+}
+.user input {
+	font:inherit;
+	margin:0.5em 0;
+	transition:background-color 0.2s, color 0.2s;
+	background-color:#e6e6e6;
+	outline:none;
+}
+.user > .name {
+	font-size:1.5em;
+	position:relative;
+	left:1em;
+}
+.link {
+	text-decoration:none;
+	color:blue;
+}
+.link:hover {
+	text-decoration:underline;
+	cursor:pointer;
+}
