@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Infinite Lucky Strikes</title>
+<link rel="stylesheet" type="text/css" href="Basic.css">
+<style>
+input[type=number] {
+	max-width:7em;
+}
+a.back {
+	font-size:0.5em;
+	text-decoration:none;
+}
+</style>
+</head>
+<body>
+
+<section class="header">
+<a class="header-button back" href="https://ambulatory.github.io/">< Home</a>
+<h1 class="title">Infinite Lucky Strikes</h1>
+<h2 class="subtitle">Forever Crits</h2>
+</section>
+
+<section class="content">
+<div class="chapter">
+<form class="user" action="javascript:calc()">
+<h3 class="name">Lucky Strikes</h3>
+Sniperino Level: <input type="number" id="sniperino" required><br>
+Sniperino Relic Bonus: <input type="number" id="sniperino-relic" required><br>
+Vaagur Level: <input type="number" id="vaagur" required><br>
+Vaagur Relic Bonus: <input type="number" id="vaagur-relic" step="0.01" required><br>
+<input type="submit" value="Calculate" class="content-button"><br>
+<output for="sniperino sniperino-relic vaagur vaagur-relic" id="output">
+</form>
+</div>
+
+</section>
+
+<script>
+function calc()
+{
+	var vaagurLevel = parseInt(document.getElementById("vaagur").value);
+	var vaagurRelic = parseFloat(document.getElementById("vaagur-relic").value);
+	var sniperinoLevel = parseInt(document.getElementById("sniperino").value);
+	var sniperinoRelic = parseInt(document.getElementById("sniperino-relic").value);
+	var duration = 30 + (sniperinoLevel + sniperinoRelic) * 2;
+	var vaagurReduction = -75 * (1 - Math.pow(Math.E, -.026 * (vaagurLevel + vaagurRelic)));
+	var cooldown = 1800 * (100 + vaagurReduction) / 100;
+	
+	if(duration >= Math.round(cooldown))
+	{
+		var output = "Already Infinite!";
+		output += "<br>Duration: " + duration + "s";
+		output += "<br>Cooldown: " + (Math.floor(cooldown / 60)) + "m " + (Math.round(cooldown) % 60) + "s" + " (" + Math.round(cooldown) + "s)";
+		document.getElementById("output").innerHTML = output;
+	}
+	else
+	{
+		var totalCost = 0;
+		var totalSniperinoCost = 0;
+		var totalVaagurCost = 0;
+		var vaagurIncrement = 0;
+		var sniperinoIncrement = 0;
+		while(duration < Math.round(cooldown))
+		{
+			var nextVaagurCost = Math.pow(2, vaagurLevel + 1);
+			var nextSniperinoCost = Math.pow(2, sniperinoLevel + 1);
+			var nextVaagurReduction = -75 * (1 - Math.pow(Math.E, -.026 * (vaagurLevel + vaagurRelic + 1)));
+			var nextCooldown = 1800 * (100 + nextVaagurReduction) / 100;
+			var nextDuration = 30 + (sniperinoLevel + sniperinoRelic + 1) * 2;
+			var vaagurDiff = cooldown - nextCooldown;
+			var sniperinoDiff = nextDuration - duration;
+			var sniperinoToVaagur = (sniperinoDiff * nextVaagurCost) / (nextSniperinoCost * vaagurDiff);
+			if(sniperinoToVaagur >= 1)
+			{
+				console.log("sniper");
+				sniperinoLevel++;
+				sniperinoIncrement++;
+				totalSniperinoCost += nextSniperinoCost;
+				duration = 30 + (sniperinoLevel + sniperinoRelic) * 2;
+			}
+			else
+			{
+				console.log("vaagur");
+				vaagurLevel++;
+				vaagurIncrement++;
+				totalVaagurCost += nextVaagurCost;
+				vaagurReduction = -75 * (1 - Math.pow(Math.E, -.026 * (vaagurLevel + vaagurRelic)));
+				cooldown = 1800 * (100 + vaagurReduction) / 100;
+			}
+		}
+		
+		
+		while(duration - Math.round(cooldown) >= 2 && sniperinoIncrement > 0)
+		{
+			sniperinoLevel--;
+			sniperinoIncrement--;
+			totalSniperinoCost -= Math.pow(2, sniperinoLevel + 1);
+			duration = 30 + (sniperinoLevel + sniperinoRelic) * 2;
+		}
+		
+		totalCost = totalSniperinoCost + totalVaagurCost;
+		var output = "Sniperino: " + sniperinoLevel + " (+" + sniperinoIncrement + "; " + totalSniperinoCost.toPrecision(4) + " HS)";
+		output += "<br>Vaagur: " + vaagurLevel + " (+" + vaagurIncrement + "; " + totalVaagurCost.toPrecision(4) + " HS)";
+		output += "<br>Duration: " + duration + "s";
+		output += "<br>Cooldown: " + (Math.floor(Math.round(cooldown) / 60)) + "m " + (Math.round(cooldown) % 60) + "s" + " (" + Math.round(cooldown) + "s)";
+		output += "<br>Total Cost: " + totalCost.toPrecision(4) + " Hero Souls";
+		document.getElementById("output").innerHTML = output;
+	}
+}
+</script>
+
+</body>
+</html>
